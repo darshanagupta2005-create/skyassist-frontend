@@ -38,21 +38,27 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
   };
 
   return (
-    <Select value={currentLang} onValueChange={handleValueChange}>
-      <SelectTrigger
-        className={compact ? "h-9 w-[140px] rounded-full border-border/70" : "h-12 rounded-xl"}
-        aria-label="Preferred language"
-      >
-        <Globe className="size-4 shrink-0 text-muted-foreground" />
-        <SelectValue placeholder="Language" />
-      </SelectTrigger>
-      <SelectContent className="z-50">
-        {LANGUAGES.map((lang) => (
-          <SelectItem key={lang.code} value={lang.code}>
-            {lang.label}
-          </SelectItem>
-        ))}
-      </SelectContent>
-    </Select>
+    <div className="relative z-50">
+      <Select value={currentLang} onValueChange={handleValueChange}>
+        <SelectTrigger
+          className={
+            compact
+              ? "h-9 w-[140px] rounded-full border-border/70 bg-background/80 backdrop-blur-md cursor-pointer"
+              : "h-12 w-full rounded-xl bg-background/80 backdrop-blur-md cursor-pointer"
+          }
+          aria-label="Preferred language"
+        >
+          <Globe className="size-4 shrink-0 text-muted-foreground" />
+          <SelectValue placeholder="Language" />
+        </SelectTrigger>
+        <SelectContent className="z-[9999] bg-background border border-border shadow-xl">
+          {LANGUAGES.map((lang) => (
+            <SelectItem key={lang.code} value={lang.code} className="cursor-pointer">
+              {lang.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+    </div>
   );
 }

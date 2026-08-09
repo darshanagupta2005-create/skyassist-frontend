@@ -78,11 +78,11 @@ function LoginPage() {
         alt="Modern international airport terminal at blue hour"
         width={1600}
         height={1200}
-        className="absolute inset-0 size-full object-cover"
+        className="absolute inset-0 size-full object-cover pointer-events-none"
       />
-      <div className="absolute inset-0 bg-[oklch(0.16_0.05_265_/_0.72)]" />
+      <div className="absolute inset-0 bg-[oklch(0.16_0.05_265_/_0.72)] pointer-events-none" />
 
-      <div className="relative mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-4 py-12 lg:grid-cols-2 lg:px-8">
+      <div className="relative z-10 mx-auto grid min-h-screen max-w-6xl items-center gap-10 px-4 py-12 lg:grid-cols-2 lg:px-8">
         <motion.section
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -202,10 +202,10 @@ function LoginPage() {
                     value={form.accessibility}
                     onValueChange={(v) => update("accessibility", v)}
                   >
-                    <SelectTrigger className="h-12 rounded-xl">
+                    <SelectTrigger className="h-12 rounded-xl cursor-pointer">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="z-[9999]">
                       <SelectItem value="standard">Standard</SelectItem>
                       <SelectItem value="elderly">Elderly</SelectItem>
                       <SelectItem value="wheelchair">Wheelchair</SelectItem>
@@ -218,7 +218,7 @@ function LoginPage() {
                 </div>
               </div>
 
-              <Button type="submit" disabled={loadingAuth} className="h-13 w-full rounded-xl text-base">
+              <Button type="submit" disabled={loadingAuth} className="h-13 w-full rounded-xl text-base cursor-pointer">
                 {loadingAuth ? (
                   <>
                     <Loader2 className="size-4 animate-spin" /> Checking you in…
