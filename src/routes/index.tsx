@@ -1,3 +1,15 @@
+import { useTranslation } from 'react-i18next';
+
+export function IndexPage() {
+  const { t } = useTranslation();
+
+  return (
+    <div>
+      {/* Example: Replace "Good day" with t('good_day') */}
+      <h2>{t('good_day')}, Aarav</h2>
+    </div>
+  );
+}
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";

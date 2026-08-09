@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { Check, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { JOURNEY_STEPS, useUser } from "@/context/UserContext";
+import { useTranslation } from "react-i18next";
 
 const DETAIL: Record<string, string> = {
   "Check-In": "Row 12 · Completed 08:12",
@@ -11,14 +12,24 @@ const DETAIL: Record<string, string> = {
   Boarding: "Zone 2 · Opens 19:35",
 };
 
+// Map step strings from context to dictionary keys
+const STEP_KEYS: Record<string, string> = {
+  "Check-In": "check_in",
+  Security: "security",
+  Immigration: "immigration",
+  Gate: "gate",
+  Boarding: "boarding",
+};
+
 export function ProgressTimeline() {
   const { journeyIndex, advanceJourney } = useUser();
+  const { t } = useTranslation();
 
   return (
     <section className="rounded-3xl p-6 card-elevated" aria-label="Journey progress">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-sm font-semibold tracking-tight">Your journey</h2>
+          <h2 className="text-sm font-semibold tracking-tight">{t("your_journey")}</h2>
           <p className="text-xs text-muted-foreground">Terminal 3 · Concourse A</p>
         </div>
         <Button
@@ -28,7 +39,7 @@ export function ProgressTimeline() {
           disabled={journeyIndex >= JOURNEY_STEPS.length - 1}
           className="rounded-full text-xs"
         >
-          Mark next <ChevronRight className="size-3.5" />
+          {t("mark_next")} <ChevronRight className="size-3.5" />
         </Button>
       </div>
 
@@ -36,6 +47,8 @@ export function ProgressTimeline() {
         {JOURNEY_STEPS.map((step, i) => {
           const done = i < journeyIndex;
           const current = i === journeyIndex;
+          const translationKey = STEP_KEYS[step] || step.toLowerCase();
+
           return (
             <li key={step} className="flex gap-3">
               <div className="flex flex-col items-center">
@@ -70,7 +83,7 @@ export function ProgressTimeline() {
                     current ? "text-primary" : done ? "text-foreground" : "text-muted-foreground"
                   }`}
                 >
-                  {step}
+                  {t(translationKey)}
                   {current && (
                     <span className="ml-2 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
                       Current

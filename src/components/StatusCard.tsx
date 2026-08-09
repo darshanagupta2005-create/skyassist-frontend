@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { Clock, DoorOpen, LandPlot, Luggage, Plane, Timer } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { FlightInfo } from "@/lib/types";
+import { useTranslation } from "react-i18next";
 
 function fmt(iso: string) {
   return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
@@ -48,6 +49,7 @@ function Metric({
 }
 
 export function StatusCard({ flight }: { flight: FlightInfo | null }) {
+  const { t } = useTranslation(); // <-- Moved inside component
   const countdown = useCountdown(flight?.boardingTime);
 
   if (!flight) {
@@ -73,7 +75,6 @@ export function StatusCard({ flight }: { flight: FlightInfo | null }) {
       <div className="pointer-events-none absolute -right-16 -top-16 size-56 rounded-full bg-primary/30 blur-3xl" />
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          {/* Airline logo placeholder */}
           <span className="grid size-11 place-items-center rounded-2xl bg-primary-foreground/15 text-primary-foreground">
             <Plane className="size-5" />
           </span>
@@ -89,7 +90,7 @@ export function StatusCard({ flight }: { flight: FlightInfo | null }) {
             onTime ? "bg-success/20 text-success" : "bg-warning/20 text-warning"
           }`}
         >
-          {onTime ? "On Time" : `Delayed ${flight.delayMinutes}m`}
+          {onTime ? t("status_on_time") : `${t("status_delayed")} ${flight.delayMinutes}m`}
         </span>
       </div>
 
@@ -116,15 +117,15 @@ export function StatusCard({ flight }: { flight: FlightInfo | null }) {
       </div>
 
       <div className="relative mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Metric icon={DoorOpen} label="Gate" value={flight.gate} />
-        <Metric icon={LandPlot} label="Terminal" value={flight.terminal} />
-        <Metric icon={Luggage} label="Boarding" value={fmt(flight.boardingTime)} />
+        <Metric icon={DoorOpen} label={t("gate")} value={flight.gate} />
+        <Metric icon={LandPlot} label={t("terminal")} value={flight.terminal} />
+        <Metric icon={Luggage} label={t("boarding")} value={fmt(flight.boardingTime)} />
         <Metric icon={Clock} label="Departs" value={fmt(flight.departureTime)} />
       </div>
 
       <div className="relative mt-3 flex items-center justify-between rounded-2xl bg-primary-foreground/10 px-4 py-3">
         <p className="flex items-center gap-2 text-xs uppercase tracking-wide text-primary-foreground/70">
-          <Timer className="size-3.5" /> Boarding starts in
+          <Timer className="size-3.5" /> {t("boarding_starts")}
         </p>
         <p className="font-mono text-lg font-semibold text-primary-foreground">{countdown}</p>
       </div>
