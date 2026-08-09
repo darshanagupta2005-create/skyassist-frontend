@@ -43,7 +43,7 @@ export const Route = createFileRoute("/")({
 function LoginPage() {
   const navigate = useNavigate();
   const { login, loadingAuth, setLanguage } = useUser();
-  const { i18n, t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [form, setForm] = useState({
     email: "aarav.sharma@travel.com",
@@ -90,7 +90,7 @@ function LoginPage() {
           className="hidden text-primary-foreground lg:block"
         >
           <span className="inline-flex items-center gap-2 rounded-full bg-primary-foreground/10 px-3 py-1.5 text-xs font-medium backdrop-blur">
-            <Plane className="size-3.5" /> Changi Terminal 3 · AI Passenger Assist
+            <Plane className="size-3.5" /> Changi Terminal 3 · {t('airport_assistant') || "AI Passenger Assist"}
           </span>
           <h1 className="mt-6 text-5xl font-semibold leading-[1.05] tracking-tight">
             Never lose your way
@@ -129,7 +129,9 @@ function LoginPage() {
               </span>
               <div>
                 <p className="text-lg font-semibold tracking-tight">AeroGuide</p>
-                <p className="text-xs text-muted-foreground">Welcome back — let's get you to your gate.</p>
+                <p className="text-xs text-muted-foreground">
+                  {t('welcome_back') || "Welcome back — let's get you to your gate."}
+                </p>
               </div>
             </div>
 
@@ -179,7 +181,7 @@ function LoginPage() {
                   </div>
                 </div>
                 <div className="space-y-1.5">
-                  <Label htmlFor="flight">Flight number</Label>
+                  <Label htmlFor="flight">{t('flight') || "Flight number"}</Label>
                   <div className="relative">
                     <Ticket className="absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
@@ -195,7 +197,7 @@ function LoginPage() {
 
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="space-y-1.5">
-                  <Label>Accessibility</Label>
+                  <Label>{t('accessibility') || "Accessibility"}</Label>
                   <Select
                     value={form.accessibility}
                     onValueChange={(v) => update("accessibility", v)}
@@ -211,7 +213,7 @@ function LoginPage() {
                   </Select>
                 </div>
                 <div className="space-y-1.5">
-                  <Label>Preferred language</Label>
+                  <Label>{t('preferred_language') || "Preferred language"}</Label>
                   <LanguageSelector value={i18n.language} onChange={handleLanguageChange} />
                 </div>
               </div>
@@ -222,7 +224,7 @@ function LoginPage() {
                     <Loader2 className="size-4 animate-spin" /> Checking you in…
                   </>
                 ) : (
-                  "Sign in to AeroGuide"
+                  t('signin_button') || "Sign in to AeroGuide"
                 )}
               </Button>
               <p className="text-center text-[11px] text-muted-foreground">

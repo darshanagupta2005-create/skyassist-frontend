@@ -26,9 +26,9 @@ interface Props {
 export function LanguageSelector({ value, onChange, compact }: Props) {
   const { i18n } = useTranslation();
 
-  // Safely map complex locale codes (e.g., 'en-US') to primary codes ('en')
-  const rawLang = value || i18n.language || "en";
-  const matchedLang = LANGUAGES.find((l) => rawLang.startsWith(l.code))?.code || "en";
+  const currentLang = LANGUAGES.find(
+    (l) => (value || i18n.language || "en").startsWith(l.code)
+  )?.code || "en";
 
   const handleValueChange = (newLangCode: string) => {
     i18n.changeLanguage(newLangCode);
@@ -38,7 +38,7 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
   };
 
   return (
-    <Select value={matchedLang} onValueChange={handleValueChange}>
+    <Select value={currentLang} onValueChange={handleValueChange}>
       <SelectTrigger
         className={compact ? "h-9 w-[140px] rounded-full border-border/70" : "h-12 rounded-xl"}
         aria-label="Preferred language"
@@ -46,7 +46,7 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
         <Globe className="size-4 shrink-0 text-muted-foreground" />
         <SelectValue placeholder="Language" />
       </SelectTrigger>
-      <SelectContent className="z-50 min-w-[160px]">
+      <SelectContent className="z-50">
         {LANGUAGES.map((lang) => (
           <SelectItem key={lang.code} value={lang.code}>
             {lang.label}
