@@ -1,12 +1,5 @@
 import { Globe } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 export const LANGUAGES = [
   { code: "en", label: "English" },
@@ -30,7 +23,8 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
     (l) => (value || i18n.language || "en").startsWith(l.code)
   )?.code || "en";
 
-  const handleValueChange = (newLangCode: string) => {
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newLangCode = e.target.value;
     i18n.changeLanguage(newLangCode);
     if (onChange) {
       onChange(newLangCode);
@@ -38,27 +32,26 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
   };
 
   return (
-    <div className="relative z-50">
-      <Select value={currentLang} onValueChange={handleValueChange}>
-        <SelectTrigger
-          className={
-            compact
-              ? "h-9 w-[140px] rounded-full border-border/70 bg-background/80 backdrop-blur-md cursor-pointer"
-              : "h-12 w-full rounded-xl bg-background/80 backdrop-blur-md cursor-pointer"
-          }
-          aria-label="Preferred language"
-        >
-          <Globe className="size-4 shrink-0 text-muted-foreground" />
-          <SelectValue placeholder="Language" />
-        </SelectTrigger>
-        <SelectContent className="z-[9999] bg-background border border-border shadow-xl">
-          {LANGUAGES.map((lang) => (
-            <SelectItem key={lang.code} value={lang.code} className="cursor-pointer">
-              {lang.label}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
+    <div className="relative flex items-center w-full">
+      <Globe className="absolute left-3 size-4 text-muted-foreground pointer-events-none z-10" />
+      <select
+        value={currentLang}
+        onChange={handleSelectChange}
+        className={
+          compact
+            ? "h-9 w-[140px] pl-9 pr-3 rounded-full border border-border/70 bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer appearance-none"
+            : "h-12 w-full pl-9 pr-8 rounded-xl border border-input bg-background text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring cursor-pointer appearance-none"
+        }
+        aria-label="Preferred language"
+      >
+        {LANGUAGES.map((lang) => (
+          <option key={lang.code} value={lang.code} className="bg-background text-foreground py-1">
+            {lang.label}
+          </option>
+        ))}
+      </select>
+      {/* Native dropdown arrow indicator */}
+      <span className="absolute right-3 pointer-events-none text-xs text-muted-foreground">▼</span>
     </div>
   );
 }
