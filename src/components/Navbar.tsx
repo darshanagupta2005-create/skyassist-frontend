@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Bell, LogOut, Moon, Plane, Sun } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,8 +30,14 @@ function initials(name: string) {
 }
 
 export function Navbar() {
-  const { user, language, setLanguage, theme, toggleTheme, notifications, clearNotifications, logout } =
+  const { user, setLanguage, theme, toggleTheme, notifications, clearNotifications, logout } =
     useUser();
+  const { i18n, t } = useTranslation();
+
+  const handleLanguageChange = (code: string) => {
+    i18n.changeLanguage(code);
+    if (setLanguage) setLanguage(code);
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/80 backdrop-blur-xl">
@@ -55,8 +62,13 @@ export function Navbar() {
             Live
           </span>
 
-          <div className="hidden sm:block">
-            <LanguageSelector value={language} onChange={setLanguage} compact />
+          {/* Render LanguageSelector on all screen sizes */}
+          <div>
+            <LanguageSelector 
+              value={i18n.language} 
+              onChange={handleLanguageChange} 
+              compact 
+            />
           </div>
 
           <Popover>
@@ -123,7 +135,7 @@ export function Navbar() {
                 Assistance: {user?.accessibility}
               </DropdownMenuItem>
               <DropdownMenuItem onClick={logout} className="text-destructive focus:text-destructive">
-                <LogOut className="size-4" /> Sign out
+                <LogOut className="size-4" /> {t("sign_out")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
