@@ -1,19 +1,8 @@
-import { useTranslation } from 'react-i18next';
-
-export function IndexPage() {
-  const { t } = useTranslation();
-
-  return (
-    <div>
-      {/* Example: Replace "Good day" with t('good_day') */}
-      <h2>{t('good_day')}, Aarav</h2>
-    </div>
-  );
-}
 import { useState } from "react";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { Loader2, Lock, Mail, Plane, Ticket, UserRound } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import heroImage from "@/assets/airport-hero.jpg";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -53,7 +42,9 @@ export const Route = createFileRoute("/")({
 
 function LoginPage() {
   const navigate = useNavigate();
-  const { login, loadingAuth, language, setLanguage } = useUser();
+  const { login, loadingAuth, setLanguage } = useUser();
+  const { i18n, t } = useTranslation();
+
   const [form, setForm] = useState({
     email: "aarav.sharma@travel.com",
     password: "passenger",
@@ -65,10 +56,15 @@ function LoginPage() {
   const update = (key: keyof typeof form, value: string) =>
     setForm((f) => ({ ...f, [key]: value }));
 
+  const handleLanguageChange = (code: string) => {
+    i18n.changeLanguage(code);
+    if (setLanguage) setLanguage(code);
+  };
+
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await login({ ...form, language });
+      await login({ ...form, language: i18n.language });
       await navigate({ to: "/dashboard" });
     } catch {
       /* toast already surfaced in context */
@@ -216,7 +212,7 @@ function LoginPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label>Preferred language</Label>
-                  <LanguageSelector value={language} onChange={setLanguage} />
+                  <LanguageSelector value={i18n.language} onChange={handleLanguageChange} />
                 </div>
               </div>
 

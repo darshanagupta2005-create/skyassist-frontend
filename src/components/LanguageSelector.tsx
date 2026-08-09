@@ -23,25 +23,22 @@ interface Props {
   compact?: boolean;
 }
 
-/** Language picker used both on the login card and in the navbar. */
 export function LanguageSelector({ value, onChange, compact }: Props) {
   const { i18n } = useTranslation();
 
-  // Use passed value or fallback to active i18n language
-  const currentLang = value || i18n.language || "en";
+  // Safely map complex locale codes (e.g., 'en-US') to primary codes ('en')
+  const rawLang = value || i18n.language || "en";
+  const matchedLang = LANGUAGES.find((l) => rawLang.startsWith(l.code))?.code || "en";
 
   const handleValueChange = (newLangCode: string) => {
-    // 1. Update i18next global state
     i18n.changeLanguage(newLangCode);
-
-    // 2. Call parent callback if provided
     if (onChange) {
       onChange(newLangCode);
     }
   };
 
   return (
-    <Select value={currentLang} onValueChange={handleValueChange}>
+    <Select value={matchedLang} onValueChange={handleValueChange}>
       <SelectTrigger
         className={compact ? "h-9 w-[140px] rounded-full border-border/70" : "h-12 rounded-xl"}
         aria-label="Preferred language"
@@ -49,7 +46,7 @@ export function LanguageSelector({ value, onChange, compact }: Props) {
         <Globe className="size-4 shrink-0 text-muted-foreground" />
         <SelectValue placeholder="Language" />
       </SelectTrigger>
-      <SelectContent>
+      <SelectContent className="z-50 min-w-[160px]">
         {LANGUAGES.map((lang) => (
           <SelectItem key={lang.code} value={lang.code}>
             {lang.label}
